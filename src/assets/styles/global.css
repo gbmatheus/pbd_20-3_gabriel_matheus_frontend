@@ -1,0 +1,26 @@
+:root {
+  --color-background: #FFFFFF;
+  --color-background-dark: #F1F4F9;
+  --color-in-background: #F0F0F0;
+
+  --color-primary-light: #EAF7FC;
+  --color-primary: #26ADE4;
+  --color-primary-dark: #1C82AB;
+
+  --color-secundary: #B1E1C1;
+
+  --color-title-in-primary: #FFFFFF;
+
+  --color-text-primary: #2E88E6;
+  --color-text: #CCCCCC;
+  --color-text-title: #32264D;
+  --color-button-text: #FFFFFF;
+
+  --color-input-background: #F8F8FC;
+
+} 
+
+body, #root {
+  background: var(--color-background);
+  font-family: 'Montserrat';
+}
