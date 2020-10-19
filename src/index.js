@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 
 import App from './App.jsx';
 
-import './assets/styles/reset.css'
+// import './assets/styles/reset.css'
+import './assets/styles/reset-simples.css'
 import './assets/styles/global.css'
 
 ReactDOM.render(
