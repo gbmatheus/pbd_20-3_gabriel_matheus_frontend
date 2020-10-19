@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+html, body {
+  background: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+}
+
+body, input, textarea, button {
+  font-family: 'Montserrat', sans-serif;
+}
+
+ul, ol, li {
+  list-style: none;
+  text-decoration: none;
+}
+
+a {
+  text-decoration: none;
+  padding: 5px 10px;
+  color: black;
+}
+
+a, button {
+  cursor: pointer;
+}
