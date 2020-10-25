@@ -61,10 +61,10 @@ export const Header = styled.header`
       border: 1px solid var(--color-border);
       border-radius: 4px;
       font-size: 16px;
-      
+
       padding-left: 10px;
       margin-right: 10px;
-      
+
       &::placeholder {
         color: #000;
       }
@@ -82,6 +82,20 @@ export const Header = styled.header`
       }
     }
   }
+
+  button {
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #7f8c8d;
+    border-radius: 4px;
+    padding: 5px 20px;
+    transition: 0.2s;
+
+    &:hover {
+      background: #95a5a6;
+    }
+  }
 `;
 
 export const Main = styled.main`
@@ -93,7 +107,4 @@ export const Main = styled.main`
 
   margin-left: auto;
   margin-right: auto;
-  
-
 `;
-

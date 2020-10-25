@@ -8,10 +8,17 @@ import FuncionarioForm from "../components/Funcionario/FuncionarioFrom";
 import UsuarioTable from "../components/Usuario/UsuarioTable";
 import UsuarioForm from "../components/Usuario/UsuarioForm";
 
+import InssTable from "../components/Inss/InssTable";
+import IrrfTable from "../components/Irrf/IrrfTable";
+
 // import Valores from "../views/contador/Valores";
 import Relatorios from "../views/contador/Relatorios";
 import SalarioMinimoTable from "../components/SalarioMinimo/SalarioMinimoTable";
 import FolhaTable from "../components/FolhaMensal/FolhaTable";
+import UsuarioInfo from "../components/Usuario/UsuarioInfo";
+import FuncionarioInfo from "../components/Funcionario/FuncionarioInfo";
+import SalarioFamiliaTable from "../components/SalarioFamilia/SalarioFamiliaTable";
+import FolhaForm from "../components/FolhaMensal/FolhaForm";
 // import Conta from "../views/contador/Conta";
 
 export const routesAdmin = [
@@ -34,11 +41,11 @@ export const routesAdmin = [
     ),
   },
   {
-    path: "/usuarios/info",
+    path: "/usuarios/:id",
     exact: true,
     main: () => (
       <Admin>
-        <UsuarioForm />
+        <UsuarioInfo />
       </Admin>
     ),
   },
@@ -61,20 +68,11 @@ export const routesAdmin = [
     ),
   },
   {
-    path: "/funcionarios/editar",
+    path: "/funcionarios/:id",
     exact: true,
     main: () => (
       <Admin>
-        <FuncionarioForm button="Salvar" />
-      </Admin>
-    ),
-  },
-  {
-    path: "/funcionarios/info",
-    exact: true,
-    main: () => (
-      <Admin>
-        <FuncionarioForm />
+        <FuncionarioInfo />
       </Admin>
     ),
   },
@@ -97,6 +95,15 @@ export const routesAdmin = [
     ),
   },
   {
+    path: "/folha/info",
+    exact: true,
+    main: () => (
+      <Admin>
+        <FolhaForm />
+      </Admin>
+    ),
+  },
+  {
     path: "/minimo",
     exact: true,
     main: () => (
@@ -110,7 +117,7 @@ export const routesAdmin = [
     exact: true,
     main: () => (
       <Admin>
-        <h2>Salario familia</h2>
+        <SalarioFamiliaTable />
       </Admin>
     ),
   },
@@ -119,7 +126,7 @@ export const routesAdmin = [
     exact: true,
     main: () => (
       <Admin>
-        <h2>Inss</h2>
+        <InssTable active={false} />
       </Admin>
     ),
   },
@@ -128,7 +135,7 @@ export const routesAdmin = [
     exact: true,
     main: () => (
       <Admin>
-        <h2>Irrf</h2>
+        <IrrfTable active={false} />
       </Admin>
     ),
   },

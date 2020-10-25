@@ -42,11 +42,11 @@ function Valores() {
       </div>
 
       <Card>
-        <InssTable />
+        <InssTable active={true}/>
       </Card>
 
       <Card>
-        <IrrfTable /> 
+        <IrrfTable active={true} /> 
       </Card>
     </Container>
   );

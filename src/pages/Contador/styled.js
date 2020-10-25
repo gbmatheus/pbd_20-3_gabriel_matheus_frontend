@@ -26,7 +26,7 @@ export const Header = styled.header`
     margin-right: 20px;
   }
 
-  a {
+  button {
 
     background: var(--color-back);
     color: var(--color-button-text);
@@ -37,6 +37,7 @@ export const Header = styled.header`
     margin-right: 20px;
 
     border-radius: 4px;
+    padding: 5px 20px;
   
   }
 

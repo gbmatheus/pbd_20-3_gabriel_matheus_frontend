@@ -1,9 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
+import { logout } from "../../services/auth";
 import { Container, Content, Header, SideBar, Main } from "./styled";
 
 function Admin(props) {
+  let history = useHistory() 
+
+  function handleLogout () {
+    logout()
+    history.push("/")
+  }
+
   return (
     <>
       <Container>
@@ -30,7 +38,7 @@ function Admin(props) {
               <input type="text" placeholder="O que queres rapaz" />
               <button>Buscar</button>
             </form>
-            <Link to="/">Sair</Link>
+            <button onClick={handleLogout}>Sair</button>
           </Header>
 
           <Main>
