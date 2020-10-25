@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import api from "../../../services/api";
 
 import Table from "../../base/Table";
 
-function InssTable() {
+function InssTable(props) {
   const [inssAtuais, setInssAtuais] = useState(() => {
     const storageInss = localStorage.getItem("@Eniatus:inss");
 
@@ -20,16 +19,25 @@ function InssTable() {
   });
 
   useEffect(() => {
-    // const storageUsuarioAuth = localStorage.getItem("@Eniatus:usuarioAuth");
-    // const usuario = JSON.parse(storageUsuarioAuth);
-
     api
-      .get("/inss", { auth: { username: "contador", password: "contador" } })
+      .get("/inss")
       .then((response) => {
-        const inssAtivos = response.data.filter((inss) => {
-          return inss.ativo === true;
+        const inssAtivos = props.ativo
+          ? response.data.filter((inss) => {
+              return inss.ativo === true;
+            })
+          : response.date;
+
+        inssAtivos.sort((a, b) => {
+          if (a.aliquota > b.aliquota) {
+            return 1;
+          }
+          if (a.aliquota < b.aliquota) {
+            return -1;
+          }
+          return 0;
         });
-        console.log(inssAtivos);
+
         setInssAtuais(inssAtivos);
       })
       .catch((error) => {

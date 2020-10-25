@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FiPlusSquare, FiEdit, FiInfo, FiTrash2 } from "react-icons/fi";
+import { FiPlusSquare, FiInfo, FiTrash2 } from "react-icons/fi";
 
 import api from "../../../services/api";
 
@@ -79,14 +79,9 @@ function UsuarioTable() {
                     {usuario.tipo === "ADMIN" ? "Administrador" : "Contador"}
                   </td>
                   <td>
-                    <Link to="/admin/usuarios/info">
+                    <Link to={`/admin/usuarios/${usuario.id}`} >
                       <FiInfo size={25} color="#55efc4" />
                     </Link>
-
-                    <button>
-                      <FiEdit size={25} color="#fdcb6e" />
-                    </button>
-
                     <button>
                       <FiTrash2 size={25} color="#d63031" />
                     </button>

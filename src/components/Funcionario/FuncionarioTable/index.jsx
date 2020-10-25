@@ -1,6 +1,6 @@
 import React, {useState,useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
-import { FiPlusSquare } from "react-icons/fi";
+import { FiPlusSquare, FiInfo } from "react-icons/fi";
 
 import api from "../../../services/api";
 
@@ -42,6 +42,7 @@ function FuncionarioTable() {
       .catch((error) => {
         console.warn(error);
       });
+      // eslint-disable-next-line
   }, []);
 
   // Atualizar dados do local storage
@@ -72,8 +73,8 @@ function FuncionarioTable() {
         <tbody>
           {funcionarios.map((funcionario) => {
             return (
-              <tr key={funcionario.pessoa.nome}>
-                <td>{funcionario.pessoa.nome}</td>
+              <tr key={funcionario.pessoa.cpf}>
+                <td>{funcionario.pessoa.nome}|{funcionario.id}</td>
                 <td>{funcionario.pessoa.cpf}</td>
                 <td>{funcionario.pessoa.nascimento}</td>
                 <td>{funcionario.tipo === "MES" ? "Mensalista" : "Horista"}</td>
@@ -84,7 +85,9 @@ function FuncionarioTable() {
                 </td>
                 <td>{funcionario.admissao}</td>
                 <td>
-                  <Link to={`${url}/info`}>Info</Link>
+                  <Link to={`${url}/${funcionario.id}`}>
+                    <FiInfo size={25} color={"var(--color-button)"} />
+                  </Link>
                   {/* <button>Info</button> */}
                 </td>
               </tr>
