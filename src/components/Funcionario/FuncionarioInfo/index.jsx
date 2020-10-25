@@ -1,169 +1,173 @@
-import React, { useState } from "react";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import NumberFormat from "react-number-format";
 
 import api from "../../../services/api";
-import { path as pathname } from "../../../services/path";
+import capitalize from "../../../utils/capitalize";
+
+import Form from "../../base/Form";
 import ButtonAdd from "../../base/ButtonAdd";
+import { DetailsInfo, Field, HeaderInfo } from "./styled";
 
 function FuncionarioInfo(props) {
-  let history = useHistory();
-  let location = useLocation();
+  const { url, params } = useRouteMatch();
 
-  let from = pathname(location.pathname);
+  let history = useHistory();
+
+  let from = url.replace(`/${params.id}`, "");
+
+  const [salario, setSalario] = useState({
+    horasContratadas: 0,
+    valorDaHora: 0,
+  });
 
   const [funcionario, setFuncionario] = useState({
     quantidadeFilhos: 0,
     tipo: "MES",
-  });
-  const [pessoa, setPessoa] = useState({
-    cpf: "",
-    nome: "",
-    dtNascimento: new Date(
-      new Date().getFullYear() - 10,
-      new Date().getMonth() - 1,
-      new Date().getDate()
-    ),
-    naturalidade: "",
-  });
-  const [salario, setSalario] = useState({
-    valorDaHora: 0,
-    horasContratadas: 0,
+    pessoa: {
+      cpf: "000.000.000-00",
+      nome: "Funcionario",
+      dtNascimento: new Date(),
+      naturalidade: "brasil",
+    },
+    salario: {
+      valorDaHora: 0,
+      horasContratadas: 0,
+    },
   });
 
-  function handleCreateFuncionario(e) {
+  useEffect(() => {
+    api
+      .get(`/funcionarios/${params.id}`)
+      .then((response) => {
+        setFuncionario(response.data);
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+      // eslint-disable-next-line
+  },[]);
+
+  function handelUpdateFuncionario(e) {
     e.preventDefault();
 
-    const dt_nascimento = new Date(pessoa.dtNascimento);
-    setPessoa({ ...pessoa, dt_nascimento });
+    console.log(salario);
 
-    const funcionarioApi = { ...funcionario, pessoa, salario };
+    setFuncionario({ salario, ...funcionario });
 
     api
-      .post("/funcionarios", funcionarioApi)
+      .put(`/funcionarios/${params.id}`, funcionario)
       .then((response) => {
-        alert("Funcionario criado com sucesso");
+        alert("Salvo");
         history.push(from);
       })
       .catch((error) => {
         alert("Verifique se todos os campos foram preenchidos corretamentes");
       });
-
-    console.log(funcionarioApi);
   }
-
   return (
     <>
-      <h3>Dados Pessoais</h3>
+      <HeaderInfo>
+        <div>
+          <strong>{capitalize(funcionario.pessoa.nome)}</strong>
+        </div>
+        <ul>
+          <li>
+            <span>CPF</span>
+            <strong>{funcionario.pessoa.cpf}</strong>
+          </li>
+          <li>
+            <span>Nascimento</span>
+            <strong>
+              {new Date(funcionario.pessoa.dt_nascimento).toLocaleDateString()}
+            </strong>
+          </li>
+          <li>
+            <span>Naturalidade</span>
+            <strong>{capitalize(funcionario.pessoa.naturalidade)}</strong>
+          </li>
+        </ul>
+      </HeaderInfo>
+      {/* {salario.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} */}
+      <DetailsInfo>
+        <Form onSubmit={handelUpdateFuncionario}>
+          <div>
+            <Field>
+              Filhos
+              <NumberFormat
+                value={funcionario.quantidade_filhos}
+                onChange={(e) =>
+                  setFuncionario({
+                    ...funcionario,
+                    quantidade_filhos: e.target.value,
+                  })
+                }
+              />
+            </Field>
+            <Field>
+              Tipo
+              <select
+                name="tipo"
+                id="tipo"
+                value={funcionario.tipo}
+                onChange={(e) =>
+                  setFuncionario({
+                    ...funcionario,
+                    tipo: e.target.value,
+                  })
+                }
+              >
+                <option value="MES">Mensalista</option>
+                <option value="HORA">Horista</option>
+              </select>
+            </Field>
+            <Field>
+              Horas Contratadas
+              <NumberFormat
+                disabled={funcionario.tipo === "MES"}
+                suffix={" Hrs/Sem"}
+                value={funcionario.salario.horasContratadas}
+                onChange={(e) =>
+                  setFuncionario({
+                    ...funcionario, salario: {
+                    valorDaHora: salario.valorDaHora,
+                    horasContratadas: parseInt(
+                      e.target.value.replace(" Hrs/Sem", "")
+                    ),
+                    }
+                  })
+                }
+              />
+            </Field>
 
-      <label htmlFor="nome">
-        <p>
-          Nome: <strong>Nome Completo</strong>
-        </p>
-      </label>
+            <Field>
+              Valor da Hora
+              <NumberFormat
+                disabled={funcionario.tipo === "MES"}
+                decimalSeparator={"."}
+                decimalScale={2}
+                fixedDecimalScale={true}
+                prefix={"R$ "}
+                displayType="number"
+                value={funcionario.salario.valorDaHora}
+                onChange={(e) =>
+                  setFuncionario({
+                    ...funcionario, salario: {
+                    horasContratadas: salario.horasContratadas,
+                    valorDaHora: parseFloat(e.target.value.replace("R$ ", "")),
+                    }
+                  })
+                }
+              />
+            </Field>
+          </div>
 
-      <label htmlFor="cpf">
-        <p>
-          CPF: <strong>Nome Completo</strong>
-        </p>
-      </label>
-
-      <label htmlFor="nascimento">
-        <p>
-          Data de Nascimento: <strong>Nome Completo</strong>
-        </p>
-      </label>
-      <label htmlFor="naturalidade">
-        <p>
-          Naturalidade: <strong>Nome Completo</strong>
-        </p>
-      </label>
-      <label htmlFor="filhos">
-        <p>
-          Filhos: <strong>Nome Completo</strong>
-        </p>
-      </label>
-      <label htmlFor="nome">
-        <p>
-          Nome: <strong>Nome Completo</strong>
-        </p>
-      </label>
-      <h3>Dados do Funcionário</h3>
-
-      <label htmlFor="tipo">
-        <p>
-          Tipo: <strong>Nome Completo</strong>
-        </p>
-      </label>
-      <label htmlFor="salario">
-        <p>
-          Salario: <strong>Nome Completo</strong>
-        </p>
-      </label>
-      <label htmlFor="valor">
-        <p>
-          Valor da Hora: <strong>Nome Completo</strong>
-        </p>
-      </label>
-      <label htmlFor="horas">
-        <p>
-          Horas contratadas: <strong>Nome Completo</strong>
-        </p>
-      </label>
-
-      <label htmlFor="horas">
-        <p>
-          Trabalhando: <strong>Nome Completo</strong>
-        </p>
-      </label>
-
-      <label htmlFor="tipo">
-        Tipo
-        <select
-          name="tipo"
-          id="tipo"
-          value={funcionario.tipo}
-          onChange={(e) =>
-            setFuncionario({ ...funcionario, tipo: e.target.value })
-          }
-        >
-          <option value="MES">Mensalista</option>
-          <option value="HORA">Horista</option>
-        </select>
-      </label>
-
-      <div>
-        <label htmlFor="horas">
-          Horas Contratadas <small> Horas/Semana</small>
-          <input
-            type="text"
-            id="horas"
-            value={salario.horasContratadas}
-            placeholder="Horas/Semana"
-            onChange={(e) =>
-              setSalario({ ...salario, horasContratadas: e.target.value })
-            }
-            disabled={funcionario.tipo === "MES" ? true : false}
-          />
-        </label>
-
-        <label htmlFor="valorHora">
-          Valor da Hora<small> R$</small>
-          <input
-            type="text"
-            id="valorHora"
-            placeholder="R$"
-            value={salario.valorDaHora}
-            onChange={(e) =>
-              setSalario({ ...salario, valorDaHora: e.target.value })
-            }
-            disabled={funcionario.tipo === "MES" ? true : false}
-          />
-        </label>
-      </div>
-
-      <ButtonAdd>{props.button}</ButtonAdd>
-      <Link to={`${from}`}>Voltar</Link>
+          <div>
+            <Link to={from}>Voltar</Link>
+            <ButtonAdd>Salvar</ButtonAdd>
+          </div>
+        </Form>
+      </DetailsInfo>
     </>
   );
 }
